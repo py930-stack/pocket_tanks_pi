@@ -260,21 +260,28 @@ class Game:
                 self.spawn_shell(self.p2)
 
     def draw_hud(self):
-        hud = pygame.Surface((WIDTH, 64))
+        hud = pygame.Surface((WIDTH, 96))   # make HUD taller (was 64)
         hud.fill(HUD_COLOR)
         self.screen.blit(hud, (0, 0))
-
-        def txt(s, x, color=WHITE):
+    
+        def txt(s, x, y, color=WHITE):
             img = self.font.render(s, True, color)
-            self.screen.blit(img, (x, 8))
-
-        txt("Pocket Tanks (Lite) – Pygame", 10)
-        txt(f"Wind: {self.wind:+.2f}", 280)
-        txt(f"P1 Angle: {self.p1.angle:4.1f}  Power: {self.p1.power:4.1f}", 410, BLUE)
-        txt(f"P2 Angle: {self.p2.angle:4.1f}  Power: {self.p2.power:4.1f}", 700, ORANGE)
-        txt(f"Score  P1:{self.scores[0]}  P2:{self.scores[1]}", 620)
+            self.screen.blit(img, (x, y))
+    
+        # Top row: title + stats
+        txt("Pocket Tanks (Lite) – Pygame", 10, 8)
+        txt(f"Wind: {self.wind:+.2f}", 280, 8)
+        txt(f"P1 Angle: {self.p1.angle:4.1f}  Power: {self.p1.power:4.1f}", 410, 8, BLUE)
+        txt(f"P2 Angle: {self.p2.angle:4.1f}  Power: {self.p2.power:4.1f}", 700, 8, ORANGE)
+        txt(f"Score  P1:{self.scores[0]}  P2:{self.scores[1]}", 620, 28)
         turn_str = "P1" if self.turn == 1 else "P2 (AI)" if self.ai_for_p2 and self.turn == 2 else "P2"
-        txt(f"Turn: {turn_str}", 820, GREEN)
+        txt(f"Turn: {turn_str}", 820, 28, GREEN)
+    
+        # Bottom rows: controls (split nicely)
+        txt("[P1] Arrows=angle/power  Space=Fire", 10, 48)
+        txt("[P2] A/D,W/S  LCtrl=Fire", 10, 66)
+        txt("N:New  R:Regen  T:AI  ESC:Quit", 10, 84)
+
 
     def render(self):
         self.screen.fill(SKY_COLOR)
